@@ -27,6 +27,7 @@
 #define PRINT_PURE      options->flags[14]
 #define FORMAT          options->flags[15]
 #define SHOW_FOR_SINGLE_FILE options->flags[16]
+#define SHOWING_ALL     options->flags[17]
 
 //bunch of special inner macroses for Options structure
 #define _SHOW_AS_LIST    flags[4]
@@ -52,6 +53,7 @@
 #define _SET_PRINT_PURE(x)      options->flags[14]=x;
 #define _SET_FORMAT(x)          options->flags[15]=x;
 #define _SET_FOR_SINGLE_FILE(x) options->flags[16]=x;
+#define _SET_SHOWING_ALL(x)     options->flags[17]=x;
 
 namespace fs = std::filesystem;
 struct Options
@@ -75,8 +77,9 @@ struct Options
 		14 -P print pure 
 		15 (no key) format
 		16 (no key) show data for single file only
+		18 (util option) set if -a is activated
 	*/
-	std::array<bool, 17> flags{false};
+	std::array<bool, 18> flags{false};
 
 
 	std::string sorting_order, //fd or df
@@ -215,6 +218,7 @@ static std::unordered_map<std::string, std::function<void(Options* options)>> ge
 		_SET_SHOW_CREAT_TIME(true)
 		_SET_SHOW_WRITE_TIME(true)
 		_SET_SHOW_PERMISSION(true)
+		_SET_SHOWING_ALL(true)
 		DISABLE_OPTIONS
 	});
 	table.insert_or_assign("-h", [&](Options* options)

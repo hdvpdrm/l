@@ -19,9 +19,14 @@ void Printer::print_as_list(const Options* const options)
     auto iterate = [&](const fs::directory_entry& dir_entry,
         std::list<fs::directory_entry>& dirs,
         std::list<fs::directory_entry>& files)
-    {          
+    {
         auto entry_val = in::prepare_entry_val(dir_entry, options);
 
+	if(entry_val[0] == '.' and !SHOWING_ALL)
+	  {
+	    return;
+	  }
+	
         //if you need to show data about single file, then break function
         //execution in case passed entry val is not required
         if (SHOW_FOR_SINGLE_FILE)
@@ -47,9 +52,10 @@ void Printer::print_as_list(const Options* const options)
         {
             if (SHOW_DIRS_ONLY && dir_entry.is_directory())
             {
+	      
                 auto val = entry_val + "/";
-                InnerPrinter::print_d(val, options);
-                fmt::println("");
+		InnerPrinter::print_d(val, options);
+		fmt::println("");
             }
             else if (SHOW_FILES_ONLY && !dir_entry.is_directory())
             {
@@ -169,7 +175,9 @@ void Printer::print_as_table(const Options* const options)
     {
         namespace in = InnerPrinter;
         auto entry_val = in::prepare_entry_val(dir_entry, options);
-
+	
+	if(entry_val[0] == '.' and !SHOWING_ALL)
+	  return;
 
         //if you use regex, then break running in case entry val doesn't match regular expression
         if (USE_REGEX and !in::does_matches(entry_val, options->regex_val))
