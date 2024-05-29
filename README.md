@@ -15,11 +15,8 @@ For example, you want to see total number of elements in directory everytime you
 ## Linux
 ```
 git clone --recursive https://github.com/MAGANER/l.git
-mkdir build
-cd build
-cmake ../ -DCMAKE_BUILD_TYPE=Release
-make
-chmod +x l
+cd l
+bash build.sh
 ```
 
 ## Windows
