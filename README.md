@@ -73,3 +73,4 @@ List of flags:<br>
 ```-P``` print without colorizing, use standard color codes<br>
 ```-h``` print help page and break program execution<br>
 ```-n``` print total number of elements in directory<br>
+```-H``` print hidden files/directoris<br>
