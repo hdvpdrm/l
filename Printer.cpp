@@ -22,7 +22,7 @@ void Printer::print_as_list(const Options* const options)
     {
         auto entry_val = in::prepare_entry_val(dir_entry, options);
 
-	if(entry_val[0] == '.' and !SHOWING_ALL)
+	if(entry_val[0] == '.' and !DONT_SHOW_HIDDEN)
 	  {
 	    return;
 	  }
@@ -176,7 +176,7 @@ void Printer::print_as_table(const Options* const options)
         namespace in = InnerPrinter;
         auto entry_val = in::prepare_entry_val(dir_entry, options);
 	
-	if(entry_val[0] == '.' and !SHOWING_ALL)
+	if(entry_val[0] == '.' and !DONT_SHOW_HIDDEN)
 	  return;
 
         //if you use regex, then break running in case entry val doesn't match regular expression

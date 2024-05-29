@@ -28,6 +28,10 @@
 #define FORMAT          options->flags[15]
 #define SHOW_FOR_SINGLE_FILE options->flags[16]
 #define SHOWING_ALL     options->flags[17]
+#define SHOW_HIDDEN     options->flags[18]
+
+//yeah, it has some logical problem but it works somehow
+#define DONT_SHOW_HIDDEN SHOW_HIDDEN
 
 //bunch of special inner macroses for Options structure
 #define _SHOW_AS_LIST    flags[4]
@@ -54,6 +58,7 @@
 #define _SET_FORMAT(x)          options->flags[15]=x;
 #define _SET_FOR_SINGLE_FILE(x) options->flags[16]=x;
 #define _SET_SHOWING_ALL(x)     options->flags[17]=x;
+#define _SET_SHOW_HIDDEN(x)     options->flags[18]=x;
 
 namespace fs = std::filesystem;
 struct Options
@@ -78,13 +83,14 @@ struct Options
 		15 (no key) format
 		16 (no key) show data for single file only
 		18 (util option) set if -a is activated
+		19 -H show hidden files/directories
 	*/
 	std::array<bool, 18> flags{false};
 
 
 	std::string sorting_order, //fd or df
-				dir,           //it's current working directory by default
-				regex_val;     //match files with this string if user provided regular expression in path argument
+	  dir,           //it's current working directory by default
+	  regex_val;     //match files with this string if user provided regular expression in path argument
 
 
 	size_t table_output_width = 4; //strings number in one line.(option of table output mode)
@@ -145,7 +151,7 @@ static bool is_valid_regex(const std::string& regex)
 
 
 //option list contains all possible flags passed to the program
-static const auto option_list = std::string("-d-f-l-m-t-s-r-S-p-T-c-h-a-P-n");
+static const auto option_list = std::string("-d-f-l-m-t-s-r-S-p-T-c-h-a-P-n-H");
 static inline bool is_option(const std::string& arg)
 {
 	return option_list.find(arg) != std::string::npos;
@@ -233,7 +239,10 @@ static std::unordered_map<std::string, std::function<void(Options* options)>> ge
 	{
 		_SET_TOTAL_NUMBER(true)
 	});
-
+	table.insert_or_assign("-H", [&](Options* options)
+	{
+	  _SET_SHOW_HIDDEN(true)
+	});
 	return table;
 }
 static inline bool is_file(const std::string & arg)
