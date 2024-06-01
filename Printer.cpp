@@ -35,10 +35,6 @@ void Printer::print_as_list(const Options* const options)
                 return;
         }
         
-        //if it doesn't match the expression just break the execution
-        if (USE_REGEX and !in::does_matches(entry_val, options->regex_val))
-            return;
-
         //if shouldn't sort just print
         if (SORT)
         {
@@ -178,11 +174,7 @@ void Printer::print_as_table(const Options* const options)
 	
 	if(entry_val[0] == '.' and !DONT_SHOW_HIDDEN)
 	  return;
-
-        //if you use regex, then break running in case entry val doesn't match regular expression
-        if (USE_REGEX and !in::does_matches(entry_val, options->regex_val))
-            return;
-
+        
         if (SORT)
         {
             if (dir_entry.is_directory())
@@ -224,9 +216,6 @@ void Printer::print_as_table(const Options* const options)
             if (separator == '\n')counter = 0;
 
             auto entry_val = InnerPrinter::prepare_entry_val(arg, options);
-            //if you use regex, then break running in case entry val doesn't match regular expression
-            if (USE_REGEX and !InnerPrinter::does_matches(entry_val, options->regex_val))
-                return;
 
             auto dir_val = entry_val + "/";
             if (show_dirs)

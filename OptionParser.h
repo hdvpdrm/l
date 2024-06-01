@@ -17,7 +17,7 @@
 #define SHOW_AS_LIST    options->flags[4]
 #define SHOW_AS_TREE    options->flags[5]
 #define SHOW_AS_TABLE   options->flags[6]
-#define USE_REGEX       options->flags[7]
+//7 is free
 #define TOTAL_NUMBER    options->flags[8]
 #define SHOW_FILE_SIZE  options->flags[9]
 #define SHOW_PERMISSION options->flags[10]
@@ -47,7 +47,7 @@
 #define _SET_SHOW_AS_LIST(x)    options->flags[4]=x;
 #define _SET_SHOW_AS_TREE(x)    options->flags[5]=x;
 #define _SET_SHOW_AS_TABLE(x)   options->flags[6]=x;
-#define _SET_USE_REGEX(x)       options->flags[7]=x;
+//7 is free
 #define _SET_TOTAL_NUMBER(x)    options->flags[8]=x;
 #define _SET_SHOW_FILE_SIZE(x)  options->flags[9]=x;
 #define _SET_SHOW_PERMISSION(x) options->flags[10]=x;
@@ -136,19 +136,6 @@ struct Options
 	}
 	~Options() {}
 };
-
-static bool is_valid_regex(const std::string& regex) 
-{
-	try {
-		std::regex re(regex);
-	}
-	catch (const std::regex_error&) 
-	{
-		return false;
-	}
-	return true;
-}
-
 
 //option list contains all possible flags passed to the program
 static const auto option_list = std::string("-d-f-l-m-t-s-r-S-p-T-c-h-a-P-n-H");
@@ -283,23 +270,6 @@ static Options* parse_args(int argc, char** argv)
 		else if (fs::is_directory(arg))
 		{
 			options->dir = arg;
-		}
-		else if (is_valid_regex(arg) && !is_file(arg))
-		{
-			auto end = arg.find_last_of('/');
-			
-			//it's regular expression without path. something like l *.txt
-			//so dir will be current path, because it's already set in options constructor
-			if (end == std::string::npos)
-			{
-				options->regex_val = arg;
-			}
-			else
-			{
-				options->dir = arg.substr(0, end+1);
-				options->regex_val = arg.substr(end + 1);
-			}
-			_SET_USE_REGEX(true)
 		}
 		else if (is_file(arg))
 		{

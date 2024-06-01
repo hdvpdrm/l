@@ -257,11 +257,6 @@ void InnerPrinter::printDirectoryTree(unmutable options, const fs::path& path, s
         }
     }
 }
-bool InnerPrinter::does_matches(const std::string& str, const std::string& regex)
-{
-    std::regex _regex(regex);
-    return std::regex_search(str, _regex);
-}
 size_t InnerPrinter::compute_dir_elements_number(const std::string& path, bool rec)
 {
     using std::filesystem::directory_iterator;
